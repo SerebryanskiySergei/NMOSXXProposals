@@ -1,0 +1,27 @@
+@startuml EDID Negotiation Use Cases
+left to right direction
+
+:Customer:
+
+(Get receiver params)
+(Update source params)
+(EDID negotiation)
+
+:Customer: --> (Update source params)
+:Customer: --> (Get receiver params)
+(Get receiver params) <.right. (Update source params) : include
+(Update source params) <.right. (EDID negotiation) : include
+
+@enduml
+
+"AS a user with a laptop that connected to an HDMI-IPMX encoder that is connected through a network to an IPMX-HDMI decoder plugged into an HDMI monitor with EDID, I would like to be able to plug my laptop in and have the best video resolution displayed.
+
+AS a Pro AV installer, I've added new monitors digital signage system that uses IPMX to transport video to my displays. When I plug them in, they negotiate to 4K60, but the rest of the monitors are 1080p. I need the system to play my digital signage content on all of my system's monitors. 
+
+AS a Pro AV installer, I have developed some in house EDID software that reads the more detailed data from the monitor, such serial numbers, manufacture date and color management information. When I make video walls for customers, I use IPMX AV over IP hardware to deliver content. I would like to be able to read the EDID representation from my monitors into my home-built software, so that I can use that information to adjust the monitors and manage my system.
+
+AS a Manufacturer, I have a serial port protocol that I provide to my users as a method to control/read my device's settings. Because the devices on either end have a serial port, I still need to support this method of communication, even though there is a network in between. I need to be able to represent the RS232/422 interfaces on my devices so that my users can connect devices together that must communicate serially.
+
+AS a Manufacturer, I have provide a serial port so that my device can control a collection of monitors that I have a control library for. I need a way to represent RS232/422 ports on my NMOS devices, so that I can control attached hardware that communicates with this method. I need to be able to GET/PUT serial port settings, so that the NMOS Device and the connected device can communicate with each other.
+
+AS a Pro AV Installer, I have purchased an IPMX device that has a set of 4 GPIO ports, which is perfect for my ""Meeting room is busy"" signal, and as a signal to start the video recording system. Also, if the recorder has an error, I need to be able to read the GPIO event from the recording device. With the NMOS API, I'm able integrate these ""devices"" into my system by labeling the IO ports and subscribing and/or PUTting to them in my application. "

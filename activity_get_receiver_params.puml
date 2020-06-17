@@ -1,0 +1,39 @@
+@startuml Get receiver params
+
+|Customer|
+start
+:Looking for 
+**IS-XX** extension;
+
+|NMOS Receiver|
+if (Supports **IS-XX**?) then (no)
+    stop
+else (yes)
+    |NMOS Receiver|
+    :Return **IS-XX** URL;
+    |Customer|
+    :Looking for 
+    monitor's params;
+
+    |NMOS Receiver|
+    :Ask monitor for EDID file;
+
+    |Monitor|
+    if (Has EDID file?) then (no)
+        stop
+    else (yes)
+        :Return EDID file;
+
+        |NMOS Receiver|
+        :Parse EDID file;
+        :Tranform EDID options 
+            to **IS-XX** params;
+        :Return monitor's params;
+
+        |Customer|
+        :Working with monitor's params;
+    endif
+endif
+stop
+
+@enduml

@@ -1,0 +1,138 @@
+@startuml IMPX Model
+
+
+' a: 5
+
+' integer 6,10
+' float: 5.1
+' bool true/false
+
+' Type {
+'     name: integer,
+'     type: true,
+'     context: {
+'         name: "",
+'     }
+' }
+
+' Primitive: {
+'     name: a,
+'     type:
+'     {                        
+'         name: integer,
+'         type: true,
+'     }                           
+'     value: "5"
+' }
+
+' person.id = "Sveta"
+' pesron.id: String
+
+' person.id = {
+'     returns "Sveta"
+' }
+
+class Primitive {
+    -- Required --
+    [ID] name: String 
+    type: Primitive
+    -- Optional --
+    value: String
+    complete: bool
+    context: Primitive
+    trust: Primitive
+    protocol: Primitive
+    attributes: Attributes
+    keyframes: Primitive[]
+    methods: Methods
+}
+
+class Methods {
+    get: GetAPIMethod
+    post: PostAPIMethod
+    put: DefaultFunction
+    delete: DefaultFunction
+}
+
+Primitive --> Methods : <use>
+
+class GetAPIMethod {
+    verify: DefaultFunction
+    .. Optional -> ..
+    render: DefaultFunction
+}
+
+class PostAPIMethod {
+    post: DefaultFunction
+    .. Optional -> ..
+    init: DefaultFunction
+}
+
+Methods "<use>" <-- GetAPIMethod
+Methods "<use>" <-- PostAPIMethod
+Methods "<use>" <-- DefaultFunction
+
+GetAPIMethod "<use>" <-- DefaultFunction
+PostAPIMethod "<use>" <-- DefaultFunction
+
+class DefaultFunction {
+    name: String
+    body: String
+    latency: Latency
+}
+
+class Attributes {
+    hidden: bool
+    required: bool
+    attributes: Attribute[]
+}
+
+Primitive "<use>" <-- Attributes
+
+class Attribute {
+    hidden: bool
+    required: bool
+    value: Primitive
+}
+
+Attributes "<use>" <-- Attribute
+
+class Keyframe {
+    grain: Grain
+    value: <any>
+    transform_functions: TransformFunction[]
+}
+
+Primitive "<use>" <-- Keyframe
+
+class Grain {
+    value: int
+    scale: Scale
+}
+
+Keyframe "<use>" <-- Grain
+
+class Scale {
+    numnator: number
+    denomunator: number
+}
+
+Grain "<use>" <-- Scale
+
+class TransformFunction {
+    name: String
+    body: String
+}
+
+Keyframe "<use>" <-- TransformFunction
+
+class Latency {
+    interrupt: number
+    delay: number
+}
+
+DefaultFunction "<use>" <-- Latency
+
+
+
+@enduml

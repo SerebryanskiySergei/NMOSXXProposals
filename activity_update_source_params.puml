@@ -1,0 +1,90 @@
+@startuml Get receiver params
+
+|Customer|
+|NMOS Receiver|
+|Monitor|
+|NMOS Sender|
+|Source|
+
+|Customer|
+start
+:Looking for receiver's
+**IS-XX** extension;
+
+|NMOS Receiver|
+if (Supports **IS-XX** ?) then (no)
+    stop
+else (yes)
+    |NMOS Receiver|
+    :Returns **IS-XX** URL;
+endif
+    |Customer|
+    :Looking for 
+    monitor's params;
+
+    |NMOS Receiver|
+    :Asks monitor for EDID file;
+
+    |Monitor|
+    if (Has EDID file?) then (no)
+        stop
+    else (yes)
+        :Returns EDID file;
+    endif
+
+|NMOS Receiver|
+:Parses EDID file;
+:Tranforms EDID content 
+to **IS-XX** object;
+:Returns monitor's params;
+
+|Customer|
+:Working with monitor's params;
+
+|Customer|
+:Looking for sender's
+**IS-XX** extension;
+
+|NMOS Sender|
+if (Supports **IS-XX** ?) then (no)
+    stop
+else (yes)
+:Returns **IS-XX** URL;
+
+|Customer|
+:Looking for 
+current source's params;
+
+|NMOS Sender|
+:Asks for current source params;
+
+|Source|
+:Returns own settings;
+
+|NMOS Sender|
+:Parses source settings;
+if (Source's settings values 
+are the same with 
+**IS-XX** fields values ?) then (no)
+        :Syncronizes values;
+    else (yes)
+endif
+:Returns sender's params;
+
+|Customer|
+:Updates sender's params structure
+with data from receiver's params;
+
+:Sends updated params 
+to Sender;
+
+|NMOS Sender|
+:Validate received params;
+:Update sender's params;
+
+|Source|
+:Apply new values for settings;
+
+stop
+
+@enduml

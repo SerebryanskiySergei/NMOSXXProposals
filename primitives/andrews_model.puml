@@ -1,0 +1,198 @@
+@startuml IMPX Model
+' a: 5
+' integer 6,10
+' float: 5.1
+' bool true/false
+' Type {
+'     name: integer,
+'     type: true,
+'     context: {
+'         name: "",
+'     }
+' }
+' Primitive: {
+'     name: a,
+'     type:
+'     {                        
+'         name: integer,
+'         type: true,
+'     }                           
+'     value: "5"
+' }
+' person.id = "Sveta"
+' pesron.id: String
+' person.id = {
+'     returns "Sveta"
+' }
+Grain "<use>" <-- Scale
+Grain "<use>" <-- Clock
+class Grain {
+    value: int
+    .. Optional -> ..
+    rate:  Scale
+    clock: Clock
+    epoch: int
+}
+class Scale {
+    sample: int
+    scale: int
+    value: number
+}
+class Clock {
+    value: int
+    rate: Scale
+    .. Optional -> ..
+    root: Clock
+    epoch: int
+    preciseRate: Scale
+}
+interface iPrimitive {
+    -- Required --
+    [ID] name: String
+    context: Primitive
+    type: String (Primitive)
+    value: <any type>, Primitive, bool, nil
+    complete: bool
+    hidden: bool
+    trust: Primitive
+    attributes: Primitive
+    keyframes: Primitive
+    methods: Primitive
+}
+class Primitive {
+    -- Required --
+    [ID] name: String 
+    context: Primitive
+    type: String (Primitive)
+    value: <any type>, Primitive, bool, nil 
+    complete: bool
+    hidden: bool
+    trust: Primitive
+    attributes: false
+    keyframes: false
+    methods: false
+}
+class Primitive.State {
+    -- Required --
+    [ID] name: String 
+    context: Primitive
+    type: String (Primitive)
+    value: <any type>, Primitive, bool, nil 
+    complete: bool
+    hidden: bool
+    trust: Primitive
+    attributes: Attributes
+    keyframes: false
+    methods: false
+}
+class Primitive.Dynamic {
+    -- Required --
+    [ID] name: String 
+    context: Primitive
+    type: String (Primitive)
+    value: <any type>, Primitive, bool, nil 
+    complete: bool
+    hidden: bool
+    trust: Primitive
+    attributes: Protocol 
+    keyframes: Primitive
+    methods: Primitive
+}
+class Primitive.State.Dynamic {
+    -- Required --
+    [ID] name: String 
+    context: Primitive
+    type: String (Primitive)
+    value: <any type>, Primitive, bool, nil 
+    complete: bool
+    hidden: bool
+    trust: Primitive
+    attributes: Attributes
+    keyframes: Keyframes
+    methods: Methods
+}
+class Methods {
+    get: GetAPIMethod
+    post: PostAPIMethod
+    put: DefaultFunction
+    delete: DefaultFunction
+}
+Primitive.State.Dynamic "<use>" <-- Methods
+class GetAPIMethod {
+    verify: DefaultFunction
+    .. Optional -> ..
+    render: DefaultFunction
+}
+class PostAPIMethod {
+    post: DefaultFunction
+    .. Optional -> ..
+    init: DefaultFunction
+}
+Methods "<use>" <-- GetAPIMethod
+Methods "<use>" <-- PostAPIMethod
+Methods "<use>" <-- DefaultFunction
+GetAPIMethod "<use>" <-- DefaultFunction
+PostAPIMethod "<use>" <-- DefaultFunction
+class DefaultFunction {
+    name: String
+    body: String
+    latency: Latency
+}
+class Attributes {
+    context: Protocol
+    hidden: bool
+    protocol: Primitive
+    attributes: Attribute[]
+}
+Attributes "<use>" <--  Protocol
+Protocol   "<use>" <--  Attribute
+Attributes "<use>" <-- Attribute
+Primitive.State.Dynamic "<use>" <-- Attributes
+class Attribute {
+    context: true 
+    hidden: bool
+    required: bool
+    value: Primitive
+}
+class Protocol {
+    context: false
+    hidden: bool
+    required: bool
+    protocol: Primitive
+    attributes: Attribute[]
+}
+Keyframes "<use>" <-- Transforms 
+class Keyframes {
+    context: Transforms
+    value: Keyframe[]
+}
+Primitive.State.Dynamic "<use>" <-- Keyframes
+Keyframes "<use>" <-- Keyframe
+
+class Keyframe {
+    grain: Grain
+    .. Optional -> ..
+    value: <any>
+    transform: string
+}
+
+Keyframe "<use>" <-- Grain
+
+Transforms "<use>" <-- TransformFunction
+
+class Transforms {
+    context: false
+    value: TransformFunction[]
+}
+TransformFunction "<use>" <-- DefaultFunction
+class TransformFunction {
+    name: String
+    latency: 0
+    value: DefaultFunction
+}
+class Latency {
+    interrupt: number
+    delay: number
+}
+DefaultFunction "<use>" <-- Latency
+@enduml
