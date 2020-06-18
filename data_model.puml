@@ -1,0 +1,60 @@
+@startuml EDID Data Model
+
+enum DisplayType {
+    MONOCHROME
+    RGB
+    NON_RGB
+    UNDEFINED
+}
+
+enum AspectRatio {
+    RATIO_16_10
+    RATIO_4_3
+    RATIO_5_4
+    RATIO_16_9
+}
+
+class TimingDescriptor {
+    horizontal_active_pixels: number
+    refresh_rate: number
+    image_aspect_ratio: AspectRatio
+}
+
+class Color{
+    red : {x, y}
+    green : {x, y}
+    blue : {x, y}
+    white : {x, y}
+}
+
+class RangeLimits {
+    minimum_vertical_rate: number
+    maximum_vertical_rate: number
+    minimum_horizontal_rate: number
+    maximum_horizontal_rate: number
+    maximum_supported_pixel_clock: number
+}
+
+class EDID {
+    -- Header info --
+    edid_version: String
+    display_type: DisplayType
+    -- Basic display params --
+    horizontal_screen_size: number
+    vertical_screen_size: number
+    gamma: number
+    range: RangeLimits
+    -- Chromaticity coordinates --
+    color_params: Color
+    -- Timings --
+    standart_timing: TimingDescriptor
+}
+
+EDID -left- Color
+EDID -right- TimingDescriptor
+EDID -up- RangeLimits
+TimingDescriptor ..> AspectRatio : "<use>"
+EDID ..> DisplayType : "<use>"
+
+
+@enduml

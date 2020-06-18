@@ -6,8 +6,9 @@
 |NMOS Sender|
 |Source|
 
-|Customer|
 start
+
+|Customer|
 :Looking for receiver's
 **IS-XX** extension;
 
@@ -18,19 +19,20 @@ else (yes)
     |NMOS Receiver|
     :Returns **IS-XX** URL;
 endif
-    |Customer|
-    :Looking for 
-    monitor's params;
 
-    |NMOS Receiver|
-    :Asks monitor for EDID file;
+|Customer|
+:Looking for 
+monitor's params;
 
-    |Monitor|
-    if (Has EDID file?) then (no)
-        stop
-    else (yes)
-        :Returns EDID file;
-    endif
+|NMOS Receiver|
+:Asks monitor for EDID file;
+
+|Monitor|
+if (Has EDID file?) then (no)
+    stop
+else (yes)
+    :Returns EDID file;
+endif
 
 |NMOS Receiver|
 :Parses EDID file;
@@ -74,7 +76,6 @@ endif
 |Customer|
 :Updates sender's params structure
 with data from receiver's params;
-
 :Sends updated params 
 to Sender;
 
