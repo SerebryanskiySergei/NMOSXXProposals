@@ -1,0 +1,82 @@
+@startuml Get receiver params sequence diagram
+
+autonumber
+hide footbox
+
+actor User
+
+participant "Receiver IS-04"
+participant "Receiver IS-XX"
+
+== Looking for a link to Receiver's IS-XX == 
+
+User -> "Receiver IS-04" ++ : GET /receivers/{id}
+return  Receiver object
+
+|||
+
+User -> User : Find in Receiver object\n an ID of the Device
+User -> "Receiver IS-04" ++ : GET /devices/{id}
+return Device object
+
+|||
+
+User -> User : Verify that device's controls\n includes IS-XX
+note right
+{
+    "label": "pipeline 1 default device",
+    "id": "67c25159-ce25-4000-a66c-f31fff890265",
+    <...>
+    "controls": [
+        <...>
+        {
+            "type": "urn:x-manufacturer:<back:green>control:is-xx</back>",
+            "href": "http://134.24.64.22/ipmx/is-xx"
+        },
+        <...>
+    ]
+}
+end note
+
+== Getting a Receiver's EDID file == 
+
+User -> "Receiver IS-XX" ++ : GET /receivers/{id}
+return array with path: { ["edid"] }
+
+|||
+
+User -> "Receiver IS-XX" ++ : GET /receivers/{id}/edid
+return JSON with EDID representation
+
+|||
+
+User -> User : Working with EDID file
+note right
+{
+  "edid_version": "v1.4",
+  "display_type": "RGB",
+  "horizontal_screen_size": 2048,
+  "vertical_screen_size": 1080,
+  "gamma": 2.2,
+  "color_params": {
+    "red": {
+      "x": 256,
+      "y": 256
+    },
+    "green": {
+      "x": 256,
+      "y": 256
+    },
+    "blue": {
+      "x": 256,
+      "y": 256
+    },
+    "white": {
+      "x": 256,
+      "y": 256
+    }
+  }
+}
+end note
+
+@enduml

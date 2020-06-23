@@ -4,11 +4,11 @@
 |NMOS Receiver|
 |Monitor|
 |NMOS Sender|
-|Source|
+|HW Source|
 
-start
 
 |Customer|
+start
 :Looking for receiver's
 **IS-XX** extension;
 
@@ -60,7 +60,7 @@ current source's params;
 |NMOS Sender|
 :Asks for current source params;
 
-|Source|
+|HW Source|
 :Returns own settings;
 
 |NMOS Sender|
@@ -83,7 +83,7 @@ to Sender;
 :Validate received params;
 :Update sender's params;
 
-|Source|
+|HW Source|
 :Apply new values for settings;
 
 stop

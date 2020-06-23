@@ -1,0 +1,97 @@
+@startuml Get receiver params sequence diagram
+
+autonumber
+hide footbox
+skinparam BoxPadding 30
+
+!pragma teoz true
+
+actor User
+
+box "Receiver Side": #LightBlue
+participant "Receiver"
+endbox
+box "Sender Side" : #LightBlue
+participant "Sender IS-04"
+participant "Sender IS-XX"
+participant "HW Source"
+endbox
+
+
+== Getting a Receiver's EDID file == 
+
+User -> "Receiver" : Get Receiver's EDID File
+
+|||
+ref over User, Receiver : The same steps as on \n"Get receiver's params" diagram.
+|||
+
+"Receiver" -> "User" : Return JSON with EDID representation
+
+|||
+
+User -> User: Understanding monitor's capabilities
+note right
+{
+    ...
+    "horizontal_screen_size": 1024,
+    "vertical_screen_size": 768
+    ...
+}
+end note
+
+== Looking for an active Sender's source parameters ==
+
+User -> "Sender IS-04" ++ : GET /senders/{id}
+return Sender object
+
+User -> User : Find in Sender object\n an ID of the Device
+User -> "Sender IS-04" ++ : GET /devices/{id}
+return Device object
+
+|||
+
+User -> User : Verify that device's controls\n includes IS-XX
+
+|||
+
+User -> "Sender IS-XX" ++ : GET /senders/{id}
+return array with path: { ["flow/"] }
+
+User -> "Sender IS-XX" ++ : GET /senderes/{id}/flow
+return JSON with dynamic flow's params
+
+|||
+
+User -> User: Looking at currect\n flow's settings 
+note right
+{
+    "frame_width": 1920,
+    "frame_height":  1080
+}
+end note
+
+== Applying EDID params to the HW Source ==
+
+User -> User: Put values from EDID file\n to the flow's settings
+note right
+{
+    "frame_width": 1024,
+    "frame_height":  768
+}
+end note
+
+User -> "Sender IS-XX" ++: PATCH /senderes/{id}/flow
+
+"Sender IS-XX" -> "HW Source" ++: Change resolution form\n 1920x1080 to 1024x768
+return Success message
+
+|||
+
+"Sender IS-XX" -> "Sender IS-XX": Update flow's params in storage
+"Sender IS-XX" --> "Sender IS-04": Update IS-04 flow resource
+
+"Sender IS-XX" --> User: Updated flow's params
+deactivate
+
+@enduml

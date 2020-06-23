@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>API Preview</title>
+    </head>
+    <body>
+    <script src="https://api.apiary.io/seeds/embed.js"></script>
+    <script>
+    var embed = new Apiary.Embed({
+    apiBlueprint: `
+API Blueprint
+
+    Docs
+    Tools
+    Developers
+    Support
+
+    Tutorial
+    Advanced Tutorial
+    Specification
+    Glossary of Terms
+    MSON
+    MSON Specification
+    Examples
+
+10. Data Structures
+
+FORMAT: 1A
+
+# Data Structures API
+Following [Advanced Attributes](09.%20Advanced%20Attributes.md), this example
+demonstrates defining arbitrary data structure to be reused by various
+attribute descriptions.
+
+Since a portion of the &#96;Coupon&#96; data structure is shared between the &#96;Coupon&#96;
+definition itself and the &#96;Create a Coupon&#96; action, it was separated into a
+&#96;Coupon Base&#96; data structure in the &#96;Data Structures&#96; API Blueprint Section.
+Doing so enables us to reuse it as a base-type of other attribute definitions.
+
+
+# Group Coupons
+
+## Coupon [/coupons/{id}]
+A coupon contains information about a percent-off or amount-off discount you
+might want to apply to a customer.
+
++ Parameters
+    + id (string)
+
+        The ID of the desired coupon.
+
++ Attributes (Coupon Base)
+    + id: 250FF (string, required)
+    + created: 1415203908 (number) - Time stamp
+
+### Retrieve a Coupon [GET]
+Retrieves the coupon with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (Coupon)
+
+## Coupons [/coupons{?limit}]
+
++ Attributes (array[Coupon])
+
+### List all Coupons [GET]
+Returns a list of your coupons.
+
++ Parameters
+    + limit (number, optional)
+
+        A limit on the number of objects to be returned. Limit can range
+        between 1 and 100 items.
+
+        + Default: &#96;10&#96;
+
++ Response 200 (application/json)
+    + Attributes (Coupons)
+
+### Create a Coupon [POST]
+Creates a new Coupon.
+
++ Attributes (Coupon Base)
+
++ Request (application/json)
+
++ Response 200 (application/json)
+    + Attributes (Coupon)
+
+# Data Structures
+
+## Coupon Base (object)
++ percent_off: 25 (number)
+
+    A positive integer between 1 and 100 that represents the discount the
+    coupon will apply.
+
++ redeem_by (number) - Date after which the coupon can no longer be redeemed
+
+    FAQ Stack Overflow
+    Issues GitHub
+    Chat Slack
+    Twitter @apiblueprint
+
+API Blueprint Logo
+API Blueprint © 2013—2020
+
+    Docs
+    Tools
+    Developers
+    Support
+
+API Blueprint is released under MIT License
+`,
+    });
+    </script>
+    </body>
+    </html>

@@ -1,153 +1,146 @@
 FORMAT: 1A
-HOST: https://alpha-api.app.net
+HOST: https://hostname/ipmx/is-xx
 
-# Real World API
-This API Blueprint demonstrates a real world example documenting a portion of
-[App.net API](http://developers.app.net).
+# IS-XX API
+This API Blueprint demonstrates a IS-XX extension to AMWA [NMOS API](https://amwa-tv.github.io/nmos).
 
 NOTE: This document is a **work in progress**.
 
-# Group Posts
-This section groups App.net post resources.
+# Group API Root 
 
-## Post [/stream/0/posts/{post_id}]
-A Post is the other central object utilized by the App.net Stream API. It has
-rich text and annotations which comprise all of the content a users sees in
-their feed. Posts are closely tied to the follow graph...
+## Base [/]
 
-+ Parameters
-    + post_id: `1` (string) - The id of the Post.
+### Retrieve a list of endpoints [GET]
 
-+ Model (application/json)
++ Response 200 (application/json)
 
-    ```js
-    {
-        "data": {
-            "id": "1", // note this is a string
-            "user": {
-                ...
-            },
-            "created_at": "2012-07-16T17:25:47Z",
-            "text": "@berg FIRST post on this new site #newsocialnetwork",
-            "html": "<span itemprop=\"mention\" data-mention-name=\"berg\" data-mention-id=\"2\">@berg</span> FIRST post on <a href=\"https://join.app.net\" rel=\"nofollow\">this new site</a> <span itemprop=\"hashtag\" data-hashtag-name=\"newsocialnetwork\">#newsocialnetwork</span>.",
-            "source": {
-                "client_id": "udxGzAVBdXwGtkHmvswR5MbMEeVnq6n4",
-                "name": "Clientastic for iOS",
-                "link": "http://app.net"
-            },
-            "machine_only": false,
-            "reply_to": null,
-            "thread_id": "1",
-            "num_replies": 3,
-            "num_reposts": 0,
-            "num_stars": 0,
-            "entities": {
-                "mentions": [{
-                    "name": "berg",
-                    "id": "2",
-                    "pos": 0,
-                    "len": 5
-                }],
-                "hashtags": [{
-                    "name": "newsocialnetwork",
-                    "pos": 34,
-                    "len": 17
-                }],
-                "links": [{
-                    "text": "this new site",
-                    "url": "https://join.app.net"
-                    "pos": 20,
-                    "len": 13
-                }]
-            },
-            "you_reposted": false,
-            "you_starred": false
-        },
-        "meta": {
-            "code": 200,
-        }
-    }
-    ```
+        [
+            "receivers/",
+            "senders/"
+        ]
 
-### Retrieve a Post [GET]
-Returns a specific Post.
+# Group Receiver
+This section groups requests related Receiver's side
 
-+ Response 200
+## Receivers collection [/receivers]
 
-    [Post][]
+### Retrieve a list of receivers with IS-XX support[GET]
 
-### Delete a Post [DELETE]
-Delete a Post. The current user must be the same user who created the Post. It
-returns the deleted Post on success.
++ Response 200 (application/json)
 
-+ Response 204
+        [
+            "9126cc2f-4c26-4c9b-a6cd-93c4381c9be5".
+            "dsgd453g-54fx-66xg-23sa-gh57kgd44ag7",
+            ...
+            "7jkgd03l-35hf-dsf3-v442-fsdaj1Adall1"
+        ]
 
-## Posts Collection [/stream/0/posts]
-A Collection of posts.
-
-+ Model (application/json)
-
-    ```js
-    {
-        "data": [
-            {
-                "id": "1", // note this is a string
-                ...
-            },
-            {
-                "id": "2",
-                ...
-            },
-            {
-                "id": "3",
-                ...
-            },
-        ],
-        "meta": {
-            "code": 200,
-        }
-    }
-    ```
-
-### Create a Post [POST]
-Create a new Post object. Mentions and hashtags will be parsed out of the post
-text, as will bare URLs...
-
-+ Request
-
-    [Post][]
-
-+ Response 201
-
-    [Post][]
-
-### Retrieve all Posts [GET]
-Retrieves all posts.
-
-+ Response 200
-
-    [Posts Collection][]
-
-## Stars [/stream/0/posts/{post_id}/star]
-A User’s stars are visible to others, but they are not automatically added to
-your followers’ streams.
+## Single receiver endpoint [/receivers/{receiver_id}]
 
 + Parameters
-    + post_id: `1` (string) - The id of the Post.
+    + receiver_id: `dsgd453g-54fx-66xg-23sa-gh57kgd44ag7` (string)
 
-### Star a Post [POST]
-Save a given Post to the current User’s stars. This is just a “save” action,
-not a sharing action.
+        The ID of the receiver.
 
-*Note: A repost cannot be starred. Please star the parent Post.*
+### Receiver attributes [GET]
+Retrieves an options for the receiver
 
-+ Response 200
++ Response 200 (application/json)
 
-    [Post][]
+        [
+            "edid/"
+        ]
 
-### Unstar a Post [DELETE]
-Remove a Star from a Post.
 
-+ Response 200
+## EDID [/receivers/{receiver_id}/edid]
+EDID file contains information about viewer attached to the receiver.
 
-    [Post][]
++ Parameters
+    + receiver_id: `dsgd453g-54fx-66xg-23sa-gh57kgd44ag7` (string)
+        
+        The ID of the receiver
+
+### Get EDID [GET]
+Retrieves the EDID file for the receiver with the given ID.
+
++ Response 200 (application/json)
+    + Attributes (EDID File)
+
+# Group Sender
+This section groups requests related Senders's side
+
+## Senders endpoint [/senders]
+
+### List of all senders [GET]
+
++ Response 200 (application/json)
+
+        [
+            "9126cc2f-4c26-4c9b-a6cd-93c4381c9be5".
+            "dsgd453g-54fx-66xg-23sa-gh57kgd44ag7",
+            ...
+            "7jkgd03l-35hf-dsf3-v442-fsdaj1Adall1"
+        ]
+
+## Single sender endpoint [/senders/{sender_id}]
++ Parameters
+    + sender_id: `dsgd453g-54fx-66xg-23sa-gh57kgd44ag7` (string)
+        
+        The ID of the sender
+
+### Senders attributes [GET]
+Retrieves an options for the sender
+
++ Response 200 (application/json)
+
+        [
+            "flow/"
+        ]
+
+
+## Flow [/senders/{sender_id}/flow]
+Represents a list of dynamic fields in the flow that can be changed
+
++ Parameters
+    + sender_id: `dsgd453g-54fx-66xg-23sa-gh57kgd44ag7` (string)
+        
+        The ID of the sender
+
+### Get flow dynamuc params [GET]
+Retrives an object with all dynamic flow's fields and their active values
+
++ Response 200 (application/json)
+    + Attributes (Flow Params)
+
+### Update flow dynamuc params [PATCH]
+Retrives an object with all dynamic flow's fields and their active values
+
++ Request (application/json)
+    + Attributes (Flow Params)
+
++ Response 200 (application/json)
+    + Attributes (Flow Params)
+
+
+# Data Structures
+
+## Color (object)
++ x: 256 (number, required)
++ y: 256 (number, required)
+
+## EDID File (object)
++ edid_version: v1.4 (string, required)
++ display_type: RGB (string, required)
++ horizontal_screen_size: 2048 (number, required)
++ vertical_screen_size: 1080 (number, required)
++ gamma: 2.2 (number, required)
++ color_params (object)
+    + red (Color)
+    + green (Color)
+    + blue (Color)
+    + white (Color)
+
+
+## Flow Params (object)
++ frame_width: 1080 (number, required)
++ frame_height: 2048 (number, required)

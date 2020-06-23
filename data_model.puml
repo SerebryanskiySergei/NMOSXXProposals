@@ -43,10 +43,10 @@ class EDID {
     horizontal_screen_size: number
     vertical_screen_size: number
     gamma: number
-    range: RangeLimits
     -- Chromaticity coordinates --
     color_params: Color
-    -- Timings --
+    == Exras ===
+    range: RangeLimits
     standart_timing: TimingDescriptor
 }
 
