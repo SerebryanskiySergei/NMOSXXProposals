@@ -1,4 +1,4 @@
-@startuml Get receiver params
+@startuml Get_receiver_params_activity
 
 |Customer|
 start

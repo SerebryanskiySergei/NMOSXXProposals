@@ -1,4 +1,4 @@
-@startuml EDID Negotiation Use Cases
+@startuml EDID_Negotiation_Use_Cases
 left to right direction
 
 :Customer:

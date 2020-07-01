@@ -1,0 +1,68 @@
+@startuml EDID_Negotiation_activity
+
+|Customer|
+|NMOS Receiver|
+|Monitor|
+|NMOS Sender|
+|HW Source|
+
+
+|Customer|
+start
+:Looking for receiver's
+**IS-XX** extension;
+
+|NMOS Receiver|
+if (Supports **IS-XX** ?) then (no)
+    stop
+else (yes)
+    |NMOS Receiver|
+    :Returns **IS-XX** URL;
+endif
+
+|Customer|
+:Looking for 
+monitor's params;
+
+|NMOS Receiver|
+:Asks monitor for EDID file;
+
+|Monitor|
+if (Has EDID file?) then (no)
+    stop
+else (yes)
+    :Returns EDID file;
+endif
+
+|NMOS Receiver|
+:Parses EDID file;
+:Tranforms EDID content 
+to **IS-XX** object;
+:Returns monitor's params;
+
+|Customer|
+:Looking for sender's
+**IS-XX** extension;
+
+|NMOS Sender|
+if (Supports **IS-XX** ?) then (no)
+    stop
+else (yes)
+:Returns **IS-XX** URL;
+
+|Customer|
+:Sends monitor's params;
+
+|NMOS Sender|
+:Validate received params;
+:Negotiate params;
+:Add receiver into the list 
+of currently supported;
+:Update sender's params;
+
+|HW Source|
+:Apply new values for settings;
+
+stop
+
+@enduml

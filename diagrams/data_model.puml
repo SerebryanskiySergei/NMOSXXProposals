@@ -1,4 +1,4 @@
-@startuml EDID Data Model
+@startuml EDID_Data_Model
 
 enum DisplayType {
     MONOCHROME
@@ -20,7 +20,7 @@ class TimingDescriptor {
     image_aspect_ratio: AspectRatio
 }
 
-class Color{
+class Color {
     red : {x, y}
     green : {x, y}
     blue : {x, y}
@@ -35,9 +35,8 @@ class RangeLimits {
     maximum_supported_pixel_clock: number
 }
 
-class EDID {
+class ReceiverParams {
     -- Header info --
-    edid_version: String
     display_type: DisplayType
     -- Basic display params --
     horizontal_screen_size: number
@@ -45,16 +44,17 @@ class EDID {
     gamma: number
     -- Chromaticity coordinates --
     color_params: Color
-    == Exras ===
+    == Exras ==
     range: RangeLimits
     standart_timing: TimingDescriptor
+    hdcp: bool
+    audio_channels: number
 }
 
-EDID -left- Color
-EDID -right- TimingDescriptor
-EDID -up- RangeLimits
+ReceiverParams -left- Color
+ReceiverParams -right- TimingDescriptor
+ReceiverParams -up- RangeLimits
 TimingDescriptor ..> AspectRatio : "<use>"
-EDID ..> DisplayType : "<use>"
-
+ReceiverParams ..> DisplayType : "<use>"
 
 @enduml

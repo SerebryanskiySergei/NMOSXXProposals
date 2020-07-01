@@ -1,4 +1,4 @@
-@startuml Get receiver params sequence diagram
+@startuml Get_receiver_params_sequence
 
 autonumber
 hide footbox

@@ -1,4 +1,4 @@
-@startuml Get receiver params sequence diagram
+@startuml EDID_Negotiation_sequence
 
 autonumber
 hide footbox
@@ -8,10 +8,10 @@ skinparam BoxPadding 30
 
 actor User
 
-box "Receiver Side": #LightBlue
+box "Receiver Side"
 participant "Receiver"
 endbox
-box "Sender Side" : #LightBlue
+box "Sender Side"
 participant "Sender IS-04"
 participant "Sender IS-XX"
 participant "HW Source"
@@ -40,7 +40,7 @@ note right
 }
 end note
 
-== Looking for an active Sender's source parameters ==
+== Looking for a Sender's IS-XX Extension ==
 
 User -> "Sender IS-04" ++ : GET /senders/{id}
 return Sender object
@@ -55,41 +55,20 @@ User -> User : Verify that device's controls\n includes IS-XX
 
 |||
 
-User -> "Sender IS-XX" ++ : GET /senders/{id}
-return array with path: { ["flow/"] }
+== Sending EDID data to the Sender for negotiation ==
 
-User -> "Sender IS-XX" ++ : GET /senderes/{id}/flow
-return JSON with dynamic flow's params
+User -> "Sender IS-XX" ++: POST /senderes/{id}/flow/negotiation
+
+"Sender IS-XX" -> "Sender IS-XX": Negotiate received params\n with active params
 
 |||
-
-User -> User: Looking at currect\n flow's settings 
-note right
-{
-    "frame_width": 1920,
-    "frame_height":  1080
-}
-end note
-
-== Applying EDID params to the HW Source ==
-
-User -> User: Put values from EDID file\n to the flow's settings
-note right
-{
-    "frame_width": 1024,
-    "frame_height":  768
-}
-end note
-
-User -> "Sender IS-XX" ++: PATCH /senderes/{id}/flow
 
 "Sender IS-XX" -> "HW Source" ++: Change resolution form\n 1920x1080 to 1024x768
 return Success message
+"Sender IS-XX" -> "Sender IS-XX": Update flow's active params in storage
+"Sender IS-XX" --> "Sender IS-04": Update IS-04 flow resource with new values
 
 |||
-
-"Sender IS-XX" -> "Sender IS-XX": Update flow's params in storage
-"Sender IS-XX" --> "Sender IS-04": Update IS-04 flow resource
 
 "Sender IS-XX" --> User: Updated flow's params
 deactivate

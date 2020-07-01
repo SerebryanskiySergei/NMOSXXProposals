@@ -121,6 +121,22 @@ Retrives an object with all dynamic flow's fields and their active values
 + Response 200 (application/json)
     + Attributes (Flow Params)
 
+## Negotiation [/senders/{sender_id}/flow/negotiation]
+Mechanism for automatic source params negotiation
+
++ Parameters
+    + sender_id: `dsgd453g-54fx-66xg-23sa-gh57kgd44ag7` (string)
+        
+        The ID of the sender
+
+### Negotiate with params [POST]
+Retrives an object with all dynamic flow's fields and their active values
+
++ Request (application/json)
+    + Attributes (Negotiation object)
+
++ Response 200 (application/json)
+    + Attributes (Flow Params)
 
 # Data Structures
 
@@ -139,6 +155,10 @@ Retrives an object with all dynamic flow's fields and their active values
     + green (Color)
     + blue (Color)
     + white (Color)
+
+## Negotiation object (object)
++ type: edid (string, required)
++ params (EDID File, required)
 
 
 ## Flow Params (object)

@@ -1,4 +1,4 @@
-@startuml Get receiver params
+@startuml Manual_update_Source_params_activity
 
 |Customer|
 |NMOS Receiver|
